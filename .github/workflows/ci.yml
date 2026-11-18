@@ -11,17 +11,8 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-
-      # We removed setup-python because your local Windows machine already has Python
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
-          pip install pytest requests
-
-      - name: Run tests
-        run: pytest test_app.py -v --junitxml=test-results.xml
-        continue-on-error: true
-
-      - name: Send report to localhost
-        if: always()
-        run: python send_report.py
+          python -m pip install --upgrade pip
+          python -m pip install -r requirements.txt
+          python -m pip install pytest requests
