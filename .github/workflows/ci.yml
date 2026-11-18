@@ -11,7 +11,7 @@ permissions:
 
 jobs:
   # ------------------------------------------------------
-  # JOB 1: RUN TESTS AND SEND REPORT
+  # JOB 1: RUN TESTS AND SEND REPORT (Self-Hosted Windows)
   # ------------------------------------------------------
   test:
     runs-on: self-hosted
@@ -37,12 +37,13 @@ jobs:
         run: python send_report.py
 
   # ------------------------------------------------------
-  # JOB 2: BONUS DEPLOYMENT TO GITHUB PAGES
+  # JOB 2: BONUS DEPLOYMENT TO GITHUB PAGES (Ubuntu Linux)
   # ------------------------------------------------------
   deploy:
     needs: test
     if: github.ref == 'refs/heads/main'
-    runs-on: self-hosted
+    # SWITCH TO UBUNTU: This fixes the tar/Windows path error
+    runs-on: ubuntu-latest
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -50,8 +51,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-        with:
-          clean: false
           
       - name: Setup Pages
         uses: actions/configure-pages@v4
@@ -59,7 +58,8 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.\'  # <--- Fixed Windows path syntax
+          # Use '.' for Linux. It will correctly zip your current directory.
+          path: '.'
           
       - name: Deploy to GitHub Pages
         id: deployment
