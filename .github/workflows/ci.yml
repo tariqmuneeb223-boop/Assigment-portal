@@ -29,7 +29,6 @@ jobs:
           python -m pip install pytest requests
 
       - name: Run tests
-        # Using python -m pytest ensures it uses the global Python installation
         run: python -m pytest test_app.py -v --junitxml=test-results.xml
         continue-on-error: true
 
@@ -60,8 +59,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.'
-          shell: powershell
+          path: '.\'  # <--- Fixed Windows path syntax
           
       - name: Deploy to GitHub Pages
         id: deployment
