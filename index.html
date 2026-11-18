@@ -1,1 +1,42 @@
-<h1>Assignment Portal</h1>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Assignment Submission Portal</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; background-color: #f4f4f9; }
+        .container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); }
+        h2 { color: #333; text-align: center; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+        input { width: 100%; padding: 8px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; }
+        button { margin-top: 20px; width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; font-size: 16px; cursor: pointer; }
+        button:hover { background: #218838; }
+        .notice { margin-top: 20px; padding: 10px; background: #e2e3e5; text-align: center; border-radius: 4px; font-size: 14px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Assignment Submission Portal</h2>
+        <p style="text-align: center; color: #666;">(Static Demo - Deployed via GitHub Pages)</p>
+        
+        <form onsubmit="event.preventDefault(); alert('This is a static demo. Run python app.py locally for full functionality.');">
+            <label>Name</label>
+            <input type="text" required>
+            
+            <label>Registration Number</label>
+            <input type="text" required>
+            
+            <label>Assignment Title</label>
+            <input type="text" required>
+            
+            <label>Submission URL</label>
+            <input type="url" required>
+            
+            <button type="submit">Submit</button>
+        </form>
+
+        <div class="notice">
+            <strong>Note:</strong> This is a static frontend demonstration. The full backend logic and automated tests are executed in the GitHub Actions CI pipeline.
+        </div>
+    </div>
+</body>
+</html>
