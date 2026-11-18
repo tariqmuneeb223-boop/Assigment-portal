@@ -29,8 +29,8 @@ jobs:
           python -m pip install pytest requests
 
       - name: Run tests
-        # Outputs the XML file directly into the runner's working directory
-        run: pytest test_app.py -v --junitxml=test-results.xml
+        # Using python -m pytest ensures it uses the global Python installation
+        run: python -m pytest test_app.py -v --junitxml=test-results.xml
         continue-on-error: true
 
       - name: Send report to localhost
