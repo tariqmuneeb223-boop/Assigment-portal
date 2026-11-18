@@ -4,7 +4,6 @@ on:
   push:
     branches: [ main ]
 
-# This gives the runner permission to deploy to GitHub Pages
 permissions:
   contents: read
   pages: write
@@ -21,7 +20,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
         with:
-          clean: false # Prevents the runner from hanging on the "Post Checkout" step
+          clean: false
 
       - name: Install dependencies
         run: |
@@ -30,18 +29,19 @@ jobs:
           python -m pip install pytest requests
 
       - name: Run tests
+        # Outputs the XML file directly into the runner's working directory
         run: pytest test_app.py -v --junitxml=test-results.xml
-        continue-on-error: true # Ensures the report is sent even if tests fail
+        continue-on-error: true
 
       - name: Send report to localhost
-        if: always() # Runs this step regardless of test success or failure
+        if: always()
         run: python send_report.py
 
   # ------------------------------------------------------
   # JOB 2: BONUS DEPLOYMENT TO GITHUB PAGES
   # ------------------------------------------------------
   deploy:
-    needs: test # This ensures deployment ONLY happens if the 'test' job is successful
+    needs: test
     if: github.ref == 'refs/heads/main'
     runs-on: self-hosted
     environment:
@@ -60,7 +60,7 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: '.' # Uploads the current directory. Make sure you have an index.html!
+          path: '.'
           
       - name: Deploy to GitHub Pages
         id: deployment

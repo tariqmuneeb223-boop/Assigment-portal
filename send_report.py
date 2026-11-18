@@ -5,7 +5,9 @@ import sys
 import xml.etree.ElementTree as ET
 from datetime import datetime
 
+# This ensures we look for the XML in the exact folder the runner is executing from
 xml_file = "test-results.xml"
+
 try:
     tree = ET.parse(xml_file)
     root = tree.getroot()
@@ -44,7 +46,7 @@ report = {
     "tests": tests
 }
 
-# Since it's a self-hosted runner, we just hit localhost directly!
+# Send to localhost receiver
 url = "http://127.0.0.1:5001/report"
 
 print(f"Sending report to {url} ...")
