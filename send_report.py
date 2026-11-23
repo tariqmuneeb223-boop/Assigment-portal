@@ -3,7 +3,7 @@ import os
 import requests
 import sys
 import xml.etree.ElementTree as ET
-from datetime import datetime
+from datetime import datetime, timezone
 import smtplib
 from email.mime.text import MIMEText
 from email.mime.multipart import MIMEMultipart
@@ -40,7 +40,8 @@ report = {
     "branch": os.environ.get("GITHUB_REF_NAME"),
     "commit_sha": os.environ.get("GITHUB_SHA"),
     "run_id": os.environ.get("GITHUB_RUN_ID"),
-    "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
+    # FIXED DATETIME HERE
+    "timestamp": datetime.now(timezone.utc).isoformat(),
     "status": status,
     "total_tests": passed + failed,
     "passed": passed,
@@ -52,7 +53,7 @@ report = {
 url = "http://127.0.0.1:5001/report"
 print(f"Sending report to {url} ...")
 try:
-    response = requests.post(url, json=report)
+    response = requests.post(url, json=report, timeout=5)
     print(f"Response: {response.status_code}")
 except Exception as e:
     print(f"Failed to send to localhost: {e}")
@@ -71,7 +72,6 @@ try:
         msg['To'] = receiver_email
         msg['Subject'] = f"Pipeline Report: {status.upper()} - {os.environ.get('GITHUB_REPOSITORY')}"
 
-        # Create the email body
         body = f"""
         DevOps Pipeline Test Report
         ===========================
@@ -94,8 +94,8 @@ try:
 
         msg.attach(MIMEText(body, 'plain'))
 
-        # Connect to Gmail SMTP server
-        server = smtplib.SMTP('smtp.gmail.com', 587)
+        # Connect to Gmail SMTP server (Added 10-second timeout so it doesn't hang)
+        server = smtplib.SMTP('smtp.gmail.com', 587, timeout=10)
         server.starttls()
         server.login(sender_email, sender_password)
         text = msg.as_string()
