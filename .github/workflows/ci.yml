@@ -46,7 +46,7 @@ jobs:
         run: python send_report.py
 
   email:
-    needs: test
+    needs: report  # <--- CHANGED THIS LINE
     if: always()
     runs-on: self-hosted
     steps:
@@ -76,6 +76,6 @@ jobs:
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: '.' # Changed from 'docs' to '.' to deploy your index.html
+          path: '.' 
       - id: deployment
         uses: actions/deploy-pages@v4
