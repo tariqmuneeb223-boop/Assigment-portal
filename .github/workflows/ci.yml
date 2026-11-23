@@ -46,7 +46,7 @@ jobs:
         run: python send_report.py
 
   email:
-    needs: report  # <--- CHANGED THIS LINE
+    needs: report
     if: always()
     runs-on: self-hosted
     steps:
@@ -74,7 +74,8 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
         with:
           path: '.' 
       - id: deployment
