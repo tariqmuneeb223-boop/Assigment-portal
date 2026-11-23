@@ -32,8 +32,13 @@ jobs:
         run: python -m pytest test_app.py -v --junitxml=test-results.xml
         continue-on-error: true
 
-      - name: Send report to localhost
+      - name: Send report to localhost and email
         if: always()
+        env:
+          # These pull your secure credentials from GitHub Secrets
+          EMAIL_USER: ${{ secrets.EMAIL_USER }}
+          EMAIL_PASS: ${{ secrets.EMAIL_PASS }}
+          EMAIL_TO: ${{ secrets.EMAIL_TO }}
         run: python send_report.py
 
   # ------------------------------------------------------
@@ -42,7 +47,6 @@ jobs:
   deploy:
     needs: test
     if: github.ref == 'refs/heads/main'
-    # SWITCH TO UBUNTU: This fixes the tar/Windows path error
     runs-on: ubuntu-latest
     environment:
       name: github-pages
@@ -58,7 +62,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Use '.' for Linux. It will correctly zip your current directory.
           path: '.'
           
       - name: Deploy to GitHub Pages
