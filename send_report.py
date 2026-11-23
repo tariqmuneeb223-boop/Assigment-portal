@@ -40,7 +40,7 @@ report = {
     "branch": os.environ.get("GITHUB_REF_NAME"),
     "commit_sha": os.environ.get("GITHUB_SHA"),
     "run_id": os.environ.get("GITHUB_RUN_ID"),
-    "timestamp": datetime.now(datetime.timezone.utc).isoformat(),
+    "timestamp": datetime.datetime.now(datetime.timezone.utc).isoformat(),
     "status": status,
     "total_tests": passed + failed,
     "passed": passed,
